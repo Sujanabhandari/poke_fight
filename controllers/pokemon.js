@@ -30,8 +30,30 @@ const get_all_pokemon_id = async (req, res, next) => {
    };
    
 
+   const get_all_pokemon_id_info = async (req, res, next) => {
+    const { info, id } = req.params;
+    let result = jsonData.filter(data => id == data.id)
+
+    let finalResult = [];
+
+    result.map(data => {
+      if(info =='name') finalResult = data.name;
+      else if(info =='base')  finalResult = data.base;
+      else if(info =='type')finalResult = data.type;
+      else console.log("Wrong value")
+    });
+
+     try {
+       return res.status(200).send(finalResult);
+     } catch (err) {
+       console.log(err);
+       next(err);
+     }
+   }; 
+
 
 module.exports = {
     get_all_pokemon,
-    get_all_pokemon_id
+    get_all_pokemon_id,
+    get_all_pokemon_id_info
 };
