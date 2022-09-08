@@ -1,18 +1,16 @@
 var express = require('express');
 
-var router = express.Router();
+var usersRouter = express.Router();
 
 const {
-  get_all_pokemon
-} = require("../controllers/pokemon");
+  create_login_user
+} = require("../controllers/user_input");
 
-
-/* GET users listing. */
-router.get('/', function(req, res, next) {
+usersRouter.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
 
+usersRouter.route('/connect').post(create_login_user);
 
-
-module.exports = router;
+module.exports = usersRouter;
