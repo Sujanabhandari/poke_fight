@@ -19,6 +19,7 @@ userSchema.methods.generateToken = function () {
     email: this.email,
   };
   const token = jst.sign(payload, ADMIN_SECRET);
+  console.log(token);
   return token;
 };
 

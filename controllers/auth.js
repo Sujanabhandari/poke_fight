@@ -1,6 +1,59 @@
+// import jwt from 'jsonwebtoken';
+// import asyncHandler from '../utils/asyncHandler.js';
+// import ErrorResponse from '../utils/ErrorResponse.js';
 
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
+const registerUser = async (req, res, next) => {
+      /*  
+    Validate the input => maybe use a middleware with Joi [x]
+    Check if user already exists => User.find(by email) [x]
+      if exists say no => throw ErrorResponse [x]
+      if no exists create 
+        Hash (and salt) the password [x] https://www.npmjs.com/package/bcrypt?activeTab=readme
+        Create user [x]
+        Create token jsonwebtoken https://www.npmjs.com/package/jsonwebtoken [x]
+        Send token => res.json() res.set() res.cookie() [x]
+  */
+    const { body: 
+        { user_name, password, email}
+    } = req;
+
+    const found = await User.findOne({ email });
+    if(found) res.send("Erro Occurs");
+    const hash = await bcrypt.hash(password, 5);
+    const { _id } = await User.create ({ user_name, password: hash, email});
+    const token = jwt.sign({ _id }, process.env.SECRET_KEY);
+    res.json( {} );
+
+}
+
+const loginUser = async (req, res, next) => {
+   /*  
+    Validate the input => maybe use a middleware with Joi [x]
+    Check if user already exists => User.find(by email) [x]
+      if no exists say no => throw ErrorResponse [x]
+      if exists 
+        verify the password [x] https://www.npmjs.com/package/bcrypt?activeTab=readme
+        if password not a match => throw ErrorResponse [x]
+        if password match
+          Create token jsonwebtoken https://www.npmjs.com/package/jsonwebtoken [x]
+          Send token => res.json() res.set() res.cookie() [x]
+  */
+  const { body: { email, password} }  = req;
+    
+  const found = await User.findOne({ email }).select('+password');
+  if(!found) res.send("User not exist");
+  
+  const match = await bcrypt.compare(password, found.password);
+  if(!match) res.send("Password is incorrect", 400);
+  
+  const token = jwt.sign({ _id: found._id}, process.env.SECRET_KEY);
+  res.json({ token });
+}
+
 
 const authenticate_self = async(req, res, next) => {
     try{
@@ -30,4 +83,11 @@ const authenticate_self = async(req, res, next) => {
 
 };
 
-module.exports = { authenticate_self };
+const getUser = async(req, res, next) => {
+  const { userId } = req;
+  const user = await User.findById(userId);
+  if (!user) throw new ErrorResponse(`User doesn't exist`, 404);
+  res.json(user);
+}
+
+module.exports = { authenticate_self, registerUser, loginUser, getUser };
