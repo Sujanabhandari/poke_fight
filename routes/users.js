@@ -12,7 +12,6 @@ usersRouter.get('/', function(req, res, next) {
 
 const {registerUser, loginUser, getUser} = require("../controllers/auth");
 
-// authRouter.route('/register').post(aythenticate_self);
 usersRouter.post('/signup', registerUser);
 usersRouter.post('/signin', loginUser);
 usersRouter.get('/me', getUser);

@@ -6,22 +6,11 @@ const { get_all_pokemon, get_all_pokemon_id, get_all_pokemon_id_info } = require
 const {  get_result_of_game,
   get_leaderboard_info, get_previous_information } = require("../controllers/game_controller");
 
-  const {
-    create_new_user, update_field_of_self
-  } = require("../controllers/users_controller");
-
-
-  const { authorizeAdmin } =  require("../middlewares/authorizeAdmin")
-  const {authenticate_self} = require("../controllers/auth");
-  
 /* GET home page. */
 
 router.get("/", function (req, res, next) {
   res.render("index", { title: "Express" });
 });
-
-router.route('/register').post(create_new_user);
-router.route('/me').patch(update_field_of_self)
 
 
 //Pokemons Routes
