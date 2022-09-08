@@ -12,7 +12,6 @@ router.get("/", function (req, res, next) {
   res.render("index", { title: "Express" });
 });
 
-
 //Pokemons Routes
 router.route("/pokemons").get(get_all_pokemon);
 
