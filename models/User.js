@@ -1,9 +1,10 @@
+const jwt = require('jsonwebtoken');
 const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 // var validator = require('validator');
 
-const { ADMIN_SECRET } = process.env;
+const { SECRET_KEY } = process.env;
 const userSchema = new Schema({
   user_name: { type: String, unique: true, minLength: 2, maxLength: 255 },
   password: { type: String, required: true },
@@ -15,10 +16,10 @@ const userSchema = new Schema({
 userSchema.methods.generateToken = function () {
   const payload = {
     _id: this._id,
-    username: this.user_name,
+    user_name: this.user_name,
     email: this.email,
   };
-  const token = jwt.sign(payload, ADMIN_SECRET);
+  const token = jwt.sign(payload, SECRET_KEY);
   console.log(token);
   return token;
 };
