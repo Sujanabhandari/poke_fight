@@ -15,10 +15,10 @@ const userSchema = new Schema({
 userSchema.methods.generateToken = function () {
   const payload = {
     _id: this._id,
-    username: this._username,
+    username: this.user_name,
     email: this.email,
   };
-  const token = jst.sign(payload, ADMIN_SECRET);
+  const token = jwt.sign(payload, ADMIN_SECRET);
   console.log(token);
   return token;
 };
