@@ -30,14 +30,13 @@ const registerUser = async (req, res, next) => {
   const createdUser = await User.create({ user_name, password: hash, email });
 
   const token = createdUser.generateToken();
- 
+ //set token
  res.set("token",token).status(201).json(
  {
   _id:createdUser._id,
   user_name: createdUser.user_name,
   password: createdUser.password,
   email:createdUser.email,
-  
 })
 };
 
